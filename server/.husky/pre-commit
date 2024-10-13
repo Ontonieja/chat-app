@@ -1,0 +1,6 @@
+cd server
+npx lint-staged
+
+npx jest 
+
+exit 1
