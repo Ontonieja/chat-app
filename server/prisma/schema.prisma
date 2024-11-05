@@ -14,6 +14,6 @@ model User {
   lastName     String?
   avatar       String?
   profileSetup Boolean @default(false)
-  name         String?
+  userName     String?
   password     String
 }

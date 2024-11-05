@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:4000/";
 
@@ -10,9 +10,9 @@ interface axiosParamsProps {
   data?: object;
 }
 
-export const useAxios = () => {
-  const [response, setResponse] = useState(undefined);
-  const [error, setError] = useState<AxiosError | null>(null);
+export const useAxios = <T,>() => {
+  const [response, setResponse] = useState<T | undefined>(undefined);
+  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async (params: axiosParamsProps) => {
@@ -29,10 +29,10 @@ export const useAxios = () => {
 
       setResponse(result.data);
     } catch (err) {
-      if (axios.isAxiosError(err) && err.response) {
-        setError(err);
-      } else {
-        return err;
+      if (axios.isAxiosError(err)) {
+        setError(
+          err.response?.data?.message || "An unexpected error occurred."
+        );
       }
     } finally {
       setIsLoading(false);
