@@ -43,7 +43,7 @@ export const signUp = async (req: Request, res: Response): Promise<any> => {
       user: {
         id: user.id,
         email: user.email,
-        name: user.name,
+        userName: user.userName,
       },
     });
   } catch (err) {
@@ -84,7 +84,11 @@ export const userLogin = async (req: Request, res: Response): Promise<any> => {
     user: {
       id: user.id,
       email: user.email,
-      name: user.name,
+      userName: user.userName,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      profileSetup: user.profileSetup,
+      avatar: user.avatar,
     },
   });
 };
@@ -93,7 +97,7 @@ export const getUserInfo = async (
   req: RequestWithUser,
   res: Response,
 ): Promise<any> => {
-  const userId = req.user?.userId;
+  const userId = req.userId;
 
   if (!userId) {
     return res
@@ -113,9 +117,42 @@ export const getUserInfo = async (
   }
 
   res.status(200).json({
-    id: userIdNumber,
+    id: user.id,
     email: user.email,
-    name: user.name,
+    userName: user.userName,
+    firstName: user.firstName,
+    lastName: user.lastName,
     profileSetup: user.profileSetup,
+    avatar: user.avatar,
   });
+};
+
+export const updateUserProfile = async (
+  req: RequestWithUser,
+  res: Response,
+): Promise<any> => {
+  const userId = req.userId;
+  const { userName, firstName, lastName, avatar } = req.body;
+
+  if (!userName || !firstName || !lastName) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+  const userIdNum = Number(userId);
+  console.log(avatar);
+  try {
+    const result = await db.user.update({
+      where: { id: userIdNum },
+      data: {
+        userName,
+        firstName,
+        lastName,
+        profileSetup: true,
+        avatar: avatar,
+      },
+    });
+    return res.status(200).json({ message: "Profile updated successfully." });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Failed to update profile." });
+  }
 };
