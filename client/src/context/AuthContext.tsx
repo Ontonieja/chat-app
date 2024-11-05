@@ -6,14 +6,22 @@ interface JWTPayload {
   user: {
     id: number;
     email: string;
-    name: string;
+    userName: string;
+    firstName?: string;
+    lastName?: string;
+    avatar?: string;
+    profileSetup: boolean;
   };
 }
 
 interface UserProps {
   id: number;
   email: string;
-  name: string;
+  userName: string;
+  firstName?: string;
+  lastName?: string;
+  avatar?: string;
+  profileSetup: boolean;
 }
 
 const AuthContext = React.createContext<{
