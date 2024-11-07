@@ -8,7 +8,9 @@ module.exports = {
         "primary-hover": "#048BEB",
         "secondary-blue": "#0681f3",
         "background-gray": "#f3f8fb",
+        "light-blue": "#f3f8fb",
         "slate-gray": "#b3b2ba",
+        "light-gray": "#8e8e8e",
         "text-gray": "#2d2d2d",
       },
       fontFamily: {
