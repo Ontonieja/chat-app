@@ -25,7 +25,6 @@ export const signUp = async (req: Request, res: Response): Promise<any> => {
         password: hashedPw,
       },
     });
-    console.log("user created:", user);
 
     const token = jwt.sign(
       { userId: user.id },
@@ -138,9 +137,8 @@ export const updateUserProfile = async (
     return res.status(400).json({ message: "All fields are required." });
   }
   const userIdNum = Number(userId);
-  console.log(avatar);
   try {
-    const result = await db.user.update({
+    const updatedUser = await db.user.update({
       where: { id: userIdNum },
       data: {
         userName,
@@ -150,7 +148,17 @@ export const updateUserProfile = async (
         avatar: avatar,
       },
     });
-    return res.status(200).json({ message: "Profile updated successfully." });
+    return res.status(200).json({
+      message: "Profile updated successfully.",
+      user: {
+        id: updatedUser.id,
+        userName: updatedUser.userName,
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
+        profileSetup: updatedUser.profileSetup,
+        avatar: updatedUser.avatar,
+      },
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Failed to update profile." });

@@ -209,10 +209,16 @@ describe("Auth Controller", () => {
         },
         userId: "1",
       } as any;
+
       const res = mockResponse();
 
       (db.user.update as jest.Mock).mockResolvedValue({
-        message: "Profile updated successfully.",
+        id: 1,
+        userName: "DangJohn",
+        firstName: "John",
+        lastName: "Dang",
+        profileSetup: true,
+        avatar: "/assets/avatar1.png",
       });
 
       await updateUserProfile(req, res);
@@ -220,6 +226,14 @@ describe("Auth Controller", () => {
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         message: "Profile updated successfully.",
+        user: {
+          id: 1,
+          userName: "DangJohn",
+          firstName: "John",
+          lastName: "Dang",
+          profileSetup: true,
+          avatar: "/assets/avatar1.png",
+        },
       });
     });
   });

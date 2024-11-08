@@ -17,7 +17,8 @@ export default function Auth() {
               <h1 className="text-2xl md:text-3xl font-medium">Hello Again!</h1>
               <p className="text-slate-gray text-sm md:text-base mt-2 mx-auto text-center">
                 Surf the waves of conversation and dive into meaningful
-                connections and bdsadasdas.{" "}
+                connections. With waveTalk, let every message feel like a
+                breeze, every interaction a journey.
               </p>
               <div className="mt-6 w-full">
                 <LoginForm showSignUp={showSignUp} />
