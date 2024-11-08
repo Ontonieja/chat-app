@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { USER_INFO } from "../utils/constants";
 import axios from "axios";
+import { UserProps } from "../utils/types";
 
 interface JWTPayload {
+  message?: string;
   user: {
     id: number;
     email: string;
@@ -12,16 +14,6 @@ interface JWTPayload {
     avatar?: string;
     profileSetup: boolean;
   };
-}
-
-interface UserProps {
-  id: number;
-  email: string;
-  userName: string;
-  firstName?: string;
-  lastName?: string;
-  avatar?: string;
-  profileSetup: boolean;
 }
 
 const AuthContext = React.createContext<{

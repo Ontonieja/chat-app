@@ -7,6 +7,7 @@ import { SETUP_PROFILE, TOAST_DURATION } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useEffect } from "react";
+import { UserResponse } from "../utils/types";
 
 const userSchema = z.object({
   userName: z.string().min(1, { message: "Username is required" }),
@@ -18,9 +19,9 @@ export default function ProfileForm({
 }: {
   selectedAvatar: string | null;
 }) {
-  const { response, error, isLoading, fetchData } = useAxios();
+  const { response, error, isLoading, fetchData } = useAxios<UserResponse>();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -54,9 +55,10 @@ export default function ProfileForm({
       toast.success("Profile setup successfully", {
         duration: TOAST_DURATION,
       });
+      login(response);
       navigate("/chat");
     }
-  }, [isLoading, error, response, navigate]);
+  }, [isLoading, error, response, navigate, login]);
 
   return (
     <form className=" w-full flex flex-col" onSubmit={handleSubmit}>
