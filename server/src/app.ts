@@ -5,6 +5,8 @@ import http from "http";
 import cors from "cors";
 import authRouter from "./routes/auth";
 import cookieParser from "cookie-parser";
+import { anyBoolean } from "jest-mock-extended";
+import contactsRouter from "./routes/contacts";
 
 const app: Express = express();
 const httpServer = http.createServer(app);
@@ -21,5 +23,6 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use("/auth", authRouter);
+app.use("/contacts", contactsRouter);
 
 export { app, httpServer, io };

@@ -9,6 +9,7 @@ import db from "../../prisma/db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
+import { mockResponse } from "./mock";
 import { mockDeep } from "jest-mock-extended";
 import { RequestWithUser } from "../../middlewares/isAuth";
 
@@ -21,14 +22,6 @@ jest.mock("../../prisma/db", () => ({
     update: jest.fn(),
   },
 }));
-
-const mockResponse = () => {
-  const res = {} as Response;
-  res.status = jest.fn().mockReturnValue(res);
-  res.json = jest.fn().mockReturnValue(res);
-  res.cookie = jest.fn().mockReturnValue(res);
-  return res;
-};
 
 describe("Auth Controller", () => {
   describe("signUp", () => {
