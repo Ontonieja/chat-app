@@ -4,13 +4,14 @@ import { AttachmentIcon, CloseIcon, SendIcon } from "./ui/Icons";
 import Message from "./ui/Message";
 import Separator from "./ui/Separator";
 
+interface ChatElementProps {
+  isChatOpen: boolean;
+  closeChat: () => void;
+}
 export default function ChatElement({
   isChatOpen,
   closeChat,
-}: {
-  isChatOpen: boolean;
-  closeChat: () => void;
-}) {
+}: ChatElementProps) {
   const { selectedUserData } = useChatContext();
   return (
     <section

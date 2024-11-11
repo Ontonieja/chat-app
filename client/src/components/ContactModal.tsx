@@ -35,7 +35,7 @@ export default function ContactModal() {
   const handleSearch = async (searchValue: string) => {
     setSearchTerm(searchValue);
 
-    if (searchValue.length > 0) {
+    if (searchValue.length) {
       await fetchData({
         method: "POST",
         url: SEARCH_CONTACT,
@@ -48,13 +48,9 @@ export default function ContactModal() {
   };
 
   useEffect(() => {
-    if (response) {
-      setSearchedUsers(response as UserProps[]);
-    }
+    if (response) setSearchedUsers(response as UserProps[]);
 
-    if (searchTerm.length <= 0) {
-      setSearchedUsers([]);
-    }
+    if (searchTerm.length <= 0) setSearchedUsers([]);
   }, [response, searchTerm]);
 
   const handleContactClick = async (user: UserProps) => {
@@ -121,7 +117,7 @@ export default function ContactModal() {
           </>
         ) : (
           <>
-            {Array.isArray(searchedUsers) && searchedUsers.length > 0 && (
+            {Array.isArray(searchedUsers) && searchedUsers.length && (
               <div className="flex justify-start flex-col flex-1 mt-6 gap-3 pr-6 pl-3 overflow-y-auto">
                 {searchedUsers.map((user) => (
                   <AvatarWithName

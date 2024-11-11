@@ -11,13 +11,15 @@ import DashboardElement from "./ui/DashboardElement";
 import SecondDashboardElement from "./ui/SecondDashboardElement";
 import ProfileModal from "./ui/ProfileModal";
 
+interface ContactListProps {
+  user: UserProps | undefined;
+  onContactClick: () => void;
+}
+
 export default function ContactList({
   user,
   onContactClick,
-}: {
-  user: UserProps | undefined;
-  onContactClick: () => void;
-}) {
+}: ContactListProps) {
   const { userContacts, setUserContacts, setModalOpen } = useChatContext();
   const [menuOpen, setMenuOpen] = useState(false);
 
