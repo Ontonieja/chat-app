@@ -97,7 +97,6 @@ export const getUserInfo = async (
   res: Response,
 ): Promise<any> => {
   const userId = req.userId;
-
   if (!userId) {
     return res
       .status(404)

@@ -1,14 +1,6 @@
 export interface UserResponse {
   message: string;
-  user: {
-    id: number;
-    email: string;
-    userName: string;
-    firstName?: string;
-    lastName?: string;
-    avatar?: string;
-    profileSetup: boolean;
-  };
+  user: UserProps;
 }
 export interface UserProps {
   id: number;
@@ -18,4 +10,12 @@ export interface UserProps {
   lastName?: string;
   avatar?: string;
   profileSetup: boolean;
+}
+
+export interface ContactProps {
+  id: number;
+  userName: string;
+  firstName?: string;
+  lastName?: string;
+  avatar?: string;
 }

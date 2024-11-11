@@ -8,12 +8,24 @@ datasource db {
 }
 
 model User {
-  id           Int     @id @default(autoincrement())
-  email        String  @unique
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
   firstName    String?
   lastName     String?
   avatar       String?
-  profileSetup Boolean @default(false)
+  profileSetup Boolean   @default(false)
   userName     String?
   password     String
+  contacts     Contact[] @relation("UserContacts")
+  contactOf    Contact[] @relation("ContactUser")
+}
+
+model Contact {
+  id        Int  @id @default(autoincrement())
+  userId    Int
+  contactId Int
+  user      User @relation("UserContacts", fields: [userId], references: [id])
+  contact   User @relation("ContactUser", fields: [contactId], references: [id])
+
+  @@unique([userId, contactId])
 }

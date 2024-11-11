@@ -1,13 +1,15 @@
-import avatar2 from "../../assets/avatar2.png";
+import { useChatContext } from "../../hooks/useChatContext";
 import useAuth from "../../hooks/useAuth";
 
 export default function Message({ other }: { other: boolean }) {
+  const { selectedUserData } = useChatContext();
   const { user } = useAuth();
+
   return (
     <div className="w-full ">
       <div className={`flex gap-2  ${other ? "flex-row-reverse" : ""}`}>
         <img
-          src={other ? avatar2 : user?.avatar}
+          src={other ? selectedUserData?.avatar : user?.avatar}
           className="size-10 rounded-full"
         ></img>
         <div

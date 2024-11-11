@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { USER_INFO } from "../utils/constants";
 import axios from "axios";
 import { UserProps } from "../utils/types";
+import { useChatContext } from "../hooks/useChatContext";
 
 interface JWTPayload {
   message?: string;
@@ -17,13 +18,11 @@ interface JWTPayload {
 }
 
 const AuthContext = React.createContext<{
-  isLoggedIn: boolean;
   login: (data: JWTPayload) => void;
   logout: () => void;
   user: UserProps | undefined;
   loading: boolean;
 }>({
-  isLoggedIn: false,
   login: () => {},
   logout: () => {},
   user: undefined,
@@ -32,8 +31,8 @@ const AuthContext = React.createContext<{
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<UserProps | undefined>();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setIsLoading] = useState(true);
+  const { clearChatContext } = useChatContext();
   useEffect(() => {
     const getUserInfo = async () => {
       try {
@@ -42,15 +41,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
         if (response.status === 200 && response.data) {
           setUser(response.data);
-          setIsLoggedIn(true);
         } else {
           setUser(undefined);
-          setIsLoggedIn(false);
         }
       } catch (err) {
         console.log(err);
         setUser(undefined);
-        setIsLoggedIn(false);
       } finally {
         setIsLoading(false);
       }
@@ -60,17 +56,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const login = (data: JWTPayload) => {
-    setIsLoggedIn(true);
     setUser(data.user);
   };
 
   const logout = () => {
-    setIsLoggedIn(false);
     setUser(undefined);
+    clearChatContext();
+    document.cookie =
+      "jwt=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; secure; samesite=lax";
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout, user, loading }}>
+    <AuthContext.Provider value={{ login, logout, user, loading }}>
       {children}
     </AuthContext.Provider>
   );

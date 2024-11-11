@@ -1,8 +1,19 @@
-import { UserProps } from "../../utils/types";
+import { ContactProps } from "../../utils/types";
 
-export default function AvatarWithName({ user }: { user: UserProps }) {
+export default function AvatarWithName({
+  user,
+  className,
+  onClick,
+}: {
+  user: ContactProps;
+  className?: string;
+  onClick?: () => void;
+}) {
   return (
-    <div className="flex gap-3 relative items-center cursor-pointer">
+    <div
+      className={`${className} flex gap-3 relative items-center`}
+      onClick={onClick}
+    >
       <img
         src={user?.avatar}
         alt="avatar"
@@ -10,8 +21,10 @@ export default function AvatarWithName({ user }: { user: UserProps }) {
       ></img>
 
       <div className="flex flex-col max-lg:text-xs">
-        <h2 className="font-semibold">{`${user?.firstName} ${user?.lastName} `}</h2>
-        <p className="text-primary-blue font-medium">@{user?.userName}</p>
+        <h2 className="font-semibold text-sm">{`${user?.firstName} ${user?.lastName} `}</h2>
+        <p className="text-primary-blue font-medium text-sm">
+          @{user?.userName}
+        </p>
       </div>
     </div>
   );
