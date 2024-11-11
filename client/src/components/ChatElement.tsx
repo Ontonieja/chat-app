@@ -1,18 +1,34 @@
-import useAuth from "../hooks/useAuth";
+import { useChatContext } from "../hooks/useChatContext";
 import AvatarWithName from "./ui/AvatarWithName";
-import { AttachmentIcon, SendIcon } from "./ui/Icons";
+import { AttachmentIcon, CloseIcon, SendIcon } from "./ui/Icons";
 import Message from "./ui/Message";
 import Separator from "./ui/Separator";
 
-export default function ChatElement() {
-  const { user } = useAuth();
+export default function ChatElement({
+  isChatOpen,
+  closeChat,
+}: {
+  isChatOpen: boolean;
+  closeChat: () => void;
+}) {
+  const { selectedUserData } = useChatContext();
   return (
-    <section className="w-full h-full flex flex-col p-3 text-sm max-sm:hidden">
-      {user && <AvatarWithName user={user} />}
+    <section
+      className={`w-full h-full flex flex-col p-4 text-sm transition-transform duration-300 ease-in-out ${
+        isChatOpen ? "translate-x-0" : "max-md:translate-x-full"
+      } max-sm:fixed max-sm:top-0 lg:rounded-r-2xl  transition duration-200 max-sm:left-0 max-sm:w-full max-sm:h-full max-sm:z-50 bg-white`}
+    >
+      <div
+        className="absolute top-6 right-6 size-4 z-50 max-sm:block hidden"
+        onClick={closeChat}
+      >
+        <CloseIcon />
+      </div>
+      {selectedUserData && <AvatarWithName user={selectedUserData} />}
 
       <Separator />
 
-      <div className="flex-1 overflow-y-auto mt-8 space-y-8 px-3">
+      <div className="flex-1 overflow-y-auto mt-8 space-y-8">
         <Message other={false} />
         <Message other={true} />
       </div>
