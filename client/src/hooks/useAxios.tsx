@@ -4,7 +4,7 @@ import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:4000/";
 
-interface axiosParamsProps {
+export interface AxiosParamsProps {
   method: "GET" | "POST" | "PUT" | "DELETE";
   url: string;
   data?: object;
@@ -15,7 +15,7 @@ export const useAxios = <T,>() => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchData = async (params: axiosParamsProps) => {
+  const fetchData = async (params: AxiosParamsProps) => {
     setIsLoading(true);
     setError(null);
 
