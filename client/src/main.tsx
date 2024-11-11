@@ -12,6 +12,7 @@ import Profile from "./pages/Profile.tsx";
 import { AuthRoute, ProtectedRoute } from "./components/ProtectedRoute.tsx";
 import { Toaster } from "sonner";
 import Chat from "./pages/Chat.tsx";
+import { ChatContextProvider } from "./context/ChatContext.tsx";
 
 const router = createBrowserRouter([
   {
@@ -46,9 +47,11 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
-      <Toaster closeButton />
-    </AuthProvider>
+    <ChatContextProvider>
+      <AuthProvider>
+        <RouterProvider router={router} />
+        <Toaster closeButton />
+      </AuthProvider>
+    </ChatContextProvider>
   </StrictMode>
 );
