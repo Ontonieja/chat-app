@@ -2,9 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 export interface RequestWithUser extends Request {
-  userId?: {
-    userId: string;
-  };
+  userId?: number;
 }
 export default async function isAuth(
   req: RequestWithUser,
@@ -20,7 +18,7 @@ export default async function isAuth(
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
-    req.userId = decoded.userId;
+    req.userId = decoded.userId as number;
     next();
   } catch (err) {
     return res.status(403).json({ message: "Invalid Token" });
