@@ -1,7 +1,14 @@
 import { useChatContext } from "../../hooks/useChatContext";
 import useAuth from "../../hooks/useAuth";
+import { MessageProps } from "../../utils/types";
 
-export default function Message({ other }: { other: boolean }) {
+export default function Message({
+  other,
+  message,
+}: {
+  other: boolean;
+  message: MessageProps;
+}) {
   const { selectedUserData } = useChatContext();
   const { user } = useAuth();
 
@@ -9,20 +16,17 @@ export default function Message({ other }: { other: boolean }) {
     <div className="w-full ">
       <div className={`flex gap-2  ${other ? "flex-row-reverse" : ""}`}>
         <img
-          src={other ? selectedUserData?.avatar : user?.avatar}
+          src={other ? user?.avatar : selectedUserData?.avatar}
           className="size-10 rounded-full"
         ></img>
         <div
-          className={`bg-secondary-blue ${
-            other ? "!bg-light-blue !text-text-gray" : "bg-light-blue"
+          className={`${
+            other ? "!bg-secondary-blue" : "bg-light-blue !text-text-gray"
           } items-center inline-block xl:max-w-[60%] 2xl:max-w-[50%] text-white rounded-b-3xl ${
             other ? "rounded-tl-3xl" : "rounded-tr-3xl"
           }`}
         >
-          <p className="py-3 px-4">
-            Hello, my pillow is a little rough ich bin max Hello, my pillow is a
-            little Hello, my and i cant to see if youda dasd asd asdasd asdas d
-          </p>
+          <p className="py-3 px-4">{message.message}</p>
         </div>
       </div>
     </div>

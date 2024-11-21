@@ -7,17 +7,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Type {
+  TEXT
+  FILE
+}
+
 model User {
-  id           Int       @id @default(autoincrement())
-  email        String    @unique
-  firstName    String?
-  lastName     String?
-  avatar       String?
-  profileSetup Boolean   @default(false)
-  userName     String?
-  password     String
-  contacts     Contact[] @relation("UserContacts")
-  contactOf    Contact[] @relation("ContactUser")
+  id               Int       @id @default(autoincrement())
+  email            String    @unique
+  firstName        String?
+  lastName         String?
+  avatar           String?
+  profileSetup     Boolean   @default(false)
+  userName         String?
+  password         String
+  contacts         Contact[] @relation("UserContacts")
+  contactOf        Contact[] @relation("ContactUser")
+  sentMessages     Message[] @relation("Sender")
+  receivedMessages Message[] @relation("Recipent")
 }
 
 model Contact {
@@ -28,4 +35,16 @@ model Contact {
   contact   User @relation("ContactUser", fields: [contactId], references: [id])
 
   @@unique([userId, contactId])
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  senderId   Int
+  recipentId Int
+  message    String
+  type       Type
+  sentAt     DateTime @default(now())
+  isRead     Boolean  @default(false)
+  sender     User     @relation("Sender", fields: [senderId], references: [id])
+  recipent   User     @relation("Recipent", fields: [recipentId], references: [id])
 }

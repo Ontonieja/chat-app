@@ -1,5 +1,8 @@
-import { createContext, useState } from "react";
-import { ContactProps, UserProps } from "../utils/types";
+import { createContext, useEffect, useState } from "react";
+import { ContactProps, MessageProps, UserProps } from "../utils/types";
+import { useAxios } from "../hooks/useAxios";
+import { GET_MESSAGES } from "../utils/constants";
+import useAuth from "../hooks/useAuth";
 
 export interface ChatContextValue {
   modalOpen: boolean;
@@ -11,6 +14,10 @@ export interface ChatContextValue {
   userContacts: ContactProps[] | null;
   setUserContacts: React.Dispatch<React.SetStateAction<ContactProps[] | null>>;
   clearChatContext: () => void;
+  selectedUserMessages: MessageProps[] | null;
+  setSelectedUserMessages: React.Dispatch<
+    React.SetStateAction<MessageProps[] | null>
+  >;
 }
 
 export const ChatContext = createContext<ChatContextValue>({
@@ -21,6 +28,8 @@ export const ChatContext = createContext<ChatContextValue>({
   userContacts: null as ContactProps[] | null,
   setUserContacts: () => {},
   clearChatContext: () => {},
+  selectedUserMessages: null,
+  setSelectedUserMessages: () => {},
 });
 
 export function ChatContextProvider({
@@ -33,11 +42,47 @@ export function ChatContextProvider({
     UserProps | ContactProps | null
   >(null);
   const [userContacts, setUserContacts] = useState<ContactProps[] | null>(null);
+  const [selectedUserMessages, setSelectedUserMessages] = useState<
+    MessageProps[] | null
+  >(null);
+
+  const { fetchData, response, isLoading } = useAxios();
+  const { user } = useAuth();
 
   const clearChatContext = () => {
     setSelectedUserData(null);
     setUserContacts(null);
   };
+
+  useEffect(() => {
+    if (user) {
+      const fetchMessages = async () => {
+        try {
+          await fetchData({
+            url: GET_MESSAGES,
+            method: "GET",
+          });
+        } catch (error) {
+          console.error("Błąd podczas ładowania wiadomości:", error);
+        }
+      };
+
+      fetchMessages();
+    }
+  }, [user]);
+
+  useEffect(() => {
+    console.log("Response received: ", response);
+
+    if (!isLoading && response) {
+      if (Array.isArray(response) && response.length > 0) {
+        setSelectedUserMessages(response as MessageProps[]);
+      } else {
+        console.warn("Response is empty or invalid:", response);
+        setSelectedUserMessages([]);
+      }
+    }
+  }, [response, isLoading]);
 
   return (
     <ChatContext.Provider
@@ -49,6 +94,8 @@ export function ChatContextProvider({
         userContacts,
         setUserContacts,
         clearChatContext,
+        selectedUserMessages,
+        setSelectedUserMessages,
       }}
     >
       {children}
