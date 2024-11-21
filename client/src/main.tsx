@@ -13,6 +13,7 @@ import { AuthRoute, ProtectedRoute } from "./components/ProtectedRoute.tsx";
 import { Toaster } from "sonner";
 import Chat from "./pages/Chat.tsx";
 import { ChatContextProvider } from "./context/ChatContext.tsx";
+import { SocketProvider } from "./context/SocketContext.tsx";
 
 const router = createBrowserRouter([
   {
@@ -47,11 +48,13 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ChatContextProvider>
-      <AuthProvider>
-        <RouterProvider router={router} />
+    <AuthProvider>
+      <ChatContextProvider>
+        <SocketProvider>
+          <RouterProvider router={router} />
+        </SocketProvider>
         <Toaster closeButton />
-      </AuthProvider>
-    </ChatContextProvider>
+      </ChatContextProvider>
+    </AuthProvider>
   </StrictMode>
 );

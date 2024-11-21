@@ -3,6 +3,7 @@ import { USER_INFO } from "../utils/constants";
 import axios from "axios";
 import { UserProps } from "../utils/types";
 import { useChatContext } from "../hooks/useChatContext";
+import { socket } from "../utils/socket";
 
 interface JWTPayload {
   message?: string;
@@ -64,6 +65,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     clearChatContext();
     document.cookie =
       "jwt=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; secure; samesite=lax";
+    socket.disconnect();
   };
 
   return (

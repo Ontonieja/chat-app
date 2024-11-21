@@ -61,10 +61,10 @@ export const HamburgerIcon = () => {
   );
 };
 
-export const SendIcon = () => {
+export const SendIcon = ({ onClick }: { onClick?: () => void }) => {
   return (
     <IconContext.Provider value={{ className: "size-5" }}>
-      <div className="text-primary-blue hover:animate-pulse">
+      <div className="text-primary-blue hover:animate-pulse" onClick={onClick}>
         <IoIosSend />
       </div>
     </IconContext.Provider>
