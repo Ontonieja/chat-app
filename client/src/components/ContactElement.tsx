@@ -2,6 +2,12 @@ import useAuth from "../hooks/useAuth";
 import { useChatContext } from "../hooks/useChatContext";
 import { ContactProps } from "../utils/types";
 
+interface TimeAgoParams {
+  daysAgo: number;
+  hoursAgo: number;
+  minutesAgo: number;
+}
+
 export default function ContactElement({ contact }: { contact: ContactProps }) {
   const { selectedUserData, setSelectedUserData, selectedUserMessages } =
     useChatContext();
@@ -9,11 +15,13 @@ export default function ContactElement({ contact }: { contact: ContactProps }) {
   const userId = selectedUserData?.id;
   const { firstName, lastName, avatar, id: contactId } = contact;
 
-  const contactMessages = selectedUserMessages?.filter(
-    (message) =>
-      (message.recipentId === contactId && message.senderId === user?.id) ||
-      (message.senderId === contactId && message.recipentId === user?.id)
-  );
+  const contactMessages = selectedUserMessages?.filter((message) => {
+    const { recipentId, senderId } = message;
+    return (
+      (recipentId === contactId && senderId === user?.id) ||
+      (senderId === contactId && recipentId === user?.id)
+    );
+  });
 
   const lastMessage = contactMessages?.[contactMessages.length - 1];
 
@@ -25,6 +33,12 @@ export default function ContactElement({ contact }: { contact: ContactProps }) {
   const minutesAgo = Math.floor(timeDifference / (1000 * 60));
   const hoursAgo = Math.floor(timeDifference / (1000 * 60 * 60));
   const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+  function formatTimeAgo({ daysAgo, hoursAgo, minutesAgo }: TimeAgoParams) {
+    if (daysAgo > 0) return `${daysAgo} d`;
+    if (hoursAgo > 0) return `${daysAgo} h`;
+    return minutesAgo <= 0 ? "1 min" : minutesAgo + "min";
+  }
 
   return (
     <div
@@ -38,11 +52,11 @@ export default function ContactElement({ contact }: { contact: ContactProps }) {
         <div className="flex justify-between">
           <h3 className="sm:text-xs md:text-sm  font-medium">{`${firstName} ${lastName}`}</h3>
           <span className="text-light-gray text-xs">
-            {daysAgo > 0
-              ? `${daysAgo} d`
-              : hoursAgo > 0
-              ? `${hoursAgo} h`
-              : `${minutesAgo <= 0 ? "1 min" : minutesAgo + "min"}`}
+            {!lastMessage ? (
+              <span>0 d</span>
+            ) : (
+              formatTimeAgo({ daysAgo, hoursAgo, minutesAgo })
+            )}
           </span>
         </div>
         <p className="sm:text-xs md:text-sm text-light-gray line-clamp-1">

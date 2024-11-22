@@ -5,7 +5,7 @@ import contactAnimation from "../assets/contact-animation.json";
 import React, { useEffect, useState } from "react";
 import { ADD_CONTACT, SEARCH_CONTACT } from "../utils/constants";
 import { useAxios } from "../hooks/useAxios";
-import { ContactProps, UserProps } from "../utils/types";
+import { UserProps } from "../utils/types";
 import AvatarWithName from "./ui/AvatarWithName";
 import axios from "axios";
 

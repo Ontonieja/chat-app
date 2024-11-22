@@ -2,13 +2,12 @@ import { useChatContext } from "../../hooks/useChatContext";
 import useAuth from "../../hooks/useAuth";
 import { MessageProps } from "../../utils/types";
 
-export default function Message({
-  other,
-  message,
-}: {
+interface MessageComponentProps {
   other: boolean;
   message: MessageProps;
-}) {
+}
+
+export default function Message({ other, message }: MessageComponentProps) {
   const { selectedUserData } = useChatContext();
   const { user } = useAuth();
 
