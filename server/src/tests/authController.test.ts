@@ -8,10 +8,8 @@ import {
 import db from "../../prisma/db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { Request, Response } from "express";
+import { Request } from "express";
 import { mockResponse } from "./mock";
-import { mockDeep } from "jest-mock-extended";
-import { RequestWithUser } from "../../middlewares/isAuth";
 
 jest.mock("bcrypt");
 jest.mock("jsonwebtoken");

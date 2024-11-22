@@ -19,3 +19,13 @@ export interface ContactProps {
   lastName?: string;
   avatar?: string;
 }
+
+export interface MessageProps {
+  id?: number;
+  message: string;
+  senderId: number;
+  type: string;
+  recipentId: number;
+  sentAt: Date;
+  isRead: boolean;
+}

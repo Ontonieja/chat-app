@@ -5,7 +5,7 @@ import contactAnimation from "../assets/contact-animation.json";
 import React, { useEffect, useState } from "react";
 import { ADD_CONTACT, SEARCH_CONTACT } from "../utils/constants";
 import { useAxios } from "../hooks/useAxios";
-import { ContactProps, UserProps } from "../utils/types";
+import { UserProps } from "../utils/types";
 import AvatarWithName from "./ui/AvatarWithName";
 import axios from "axios";
 
@@ -57,7 +57,11 @@ export default function ContactModal() {
     setSelectedUserData(user);
     setModalOpen(false);
     setSearchedUsers([]);
-    setUserContacts([...(userContacts as ContactProps[]), user]);
+    if (Array.isArray(userContacts)) {
+      setUserContacts([...userContacts, user]);
+    } else {
+      console.error("userContacts is not an array");
+    }
 
     try {
       await axios.post(
@@ -98,7 +102,7 @@ export default function ContactModal() {
           />
         </div>
 
-        {searchTerm.length <= 0 ? (
+        {!searchTerm.length ? (
           <>
             <div className="flex flex-1 flex-col items-center gap-4 justify-center">
               <div className="md:-mt-12 xl:-mt-32">

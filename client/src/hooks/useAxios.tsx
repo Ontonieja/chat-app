@@ -28,12 +28,14 @@ export const useAxios = <T,>() => {
       });
 
       setResponse(result.data);
+      return result.data;
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError(
           err.response?.data?.message || "An unexpected error occurred."
         );
       }
+      throw err;
     } finally {
       setIsLoading(false);
     }
