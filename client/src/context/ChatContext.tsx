@@ -72,8 +72,6 @@ export function ChatContextProvider({
   }, [user]);
 
   useEffect(() => {
-    console.log("Response received: ", response);
-
     if (!isLoading && response) {
       if (Array.isArray(response) && response.length > 0) {
         setSelectedUserMessages(response as MessageProps[]);

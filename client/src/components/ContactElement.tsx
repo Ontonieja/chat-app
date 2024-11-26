@@ -25,6 +25,9 @@ export default function ContactElement({ contact }: { contact: ContactProps }) {
 
   const lastMessage = contactMessages?.[contactMessages.length - 1];
 
+  const lastMessageDisplay =
+    lastMessage?.type === "FILE" ? "Sent file" : lastMessage?.message;
+
   const currentDate = new Date();
   const sentAt = new Date(lastMessage?.sentAt || 0);
 
@@ -36,7 +39,7 @@ export default function ContactElement({ contact }: { contact: ContactProps }) {
 
   function formatTimeAgo({ daysAgo, hoursAgo, minutesAgo }: TimeAgoParams) {
     if (daysAgo > 0) return `${daysAgo} d`;
-    if (hoursAgo > 0) return `${daysAgo} h`;
+    if (hoursAgo > 0) return `${hoursAgo} h`;
     return minutesAgo <= 0 ? "1 min" : minutesAgo + "min";
   }
 
@@ -62,9 +65,9 @@ export default function ContactElement({ contact }: { contact: ContactProps }) {
         <p className="sm:text-xs md:text-sm text-light-gray line-clamp-1">
           {lastMessage ? (
             lastMessage.senderId === user?.id ? (
-              <>You: {lastMessage.message}</>
+              <>You: {lastMessageDisplay}</>
             ) : (
-              lastMessage.message
+              lastMessageDisplay
             )
           ) : (
             <span>No messages yet</span>

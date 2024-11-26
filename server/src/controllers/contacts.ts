@@ -73,7 +73,6 @@ export const getContacts = async (
   res: Response,
 ): Promise<any> => {
   const { userId } = req;
-  console.log(userId);
   if (!userId) return res.status(404).json({ message: "User not found" });
 
   const contacts = await db.contact.findMany({
@@ -101,7 +100,6 @@ export const getContacts = async (
       },
     },
   });
-  console.log(contacts);
 
   const flatContacts = contacts.map((entry) => entry.contact);
 
