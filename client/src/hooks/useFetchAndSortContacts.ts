@@ -22,7 +22,7 @@ export const useFetchAndSortContacts = () => {
       }
     };
     fetchContacts();
-  }, [user, userContacts, setUserContacts]);
+  }, [user, setUserContacts]);
 
   useEffect(() => {
     if (userContacts && selectedUserMessages) {

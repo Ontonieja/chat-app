@@ -14,5 +14,13 @@ export const ADD_CONTACT = `${CONTACT_ROUTES}/add-contact`;
 export const GET_CONTACTS = `${CONTACT_ROUTES}/get-contacts`;
 
 export const GET_MESSAGES = `${CHAT_ROUTES}/get-messages`;
+export const UPLOAD_FILE = `${CHAT_ROUTES}/upload-file`;
 
 export const TOAST_DURATION = 3000;
+
+export const validFileTypes = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "application/pdf",
+];

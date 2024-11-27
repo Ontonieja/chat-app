@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { RequestWithUser } from "../../middlewares/isAuth";
 import db from "../../prisma/db";
+import { uploadToS3 } from "../services/s3";
 
 export const getMessages = async (
   req: RequestWithUser,
@@ -23,5 +24,38 @@ export const getMessages = async (
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Internal server error", err });
+  }
+};
+
+export const uploadFile = async (
+  req: RequestWithUser,
+  res: Response,
+): Promise<any> => {
+  const { userId, file } = req;
+  const { recipentId } = req.body;
+
+  console.log(file);
+
+  if (!file || !userId)
+    return res.status(404).json({ message: "File or user not provided" });
+
+  try {
+    const s3UploadResponse = await uploadToS3({ file, userId });
+    const { fileUrl } = s3UploadResponse;
+
+    const savedFile = await db.message.create({
+      data: {
+        senderId: userId,
+        recipentId: Number(recipentId),
+        message: fileUrl,
+        type: "FILE",
+        sentAt: new Date(),
+        isRead: false,
+      },
+    });
+    return res.status(200).json(savedFile);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error", err });
   }
 };

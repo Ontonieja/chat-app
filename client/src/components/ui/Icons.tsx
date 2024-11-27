@@ -8,6 +8,8 @@ import { LuUserPlus2 } from "react-icons/lu";
 import { GrAttachment } from "react-icons/gr";
 import { IoIosSend } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
+import { LuFile } from "react-icons/lu";
+import { LuDownload } from "react-icons/lu";
 
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 
@@ -41,10 +43,15 @@ export const SearchIcon = () => {
   );
 };
 
-export const AttachmentIcon = () => {
+export const AttachmentIcon = ({ onClick }: { onClick?: () => void }) => {
   return (
-    <IconContext.Provider value={{ className: "size-5 text-light-gray" }}>
-      <div>
+    <IconContext.Provider
+      value={{
+        className:
+          "size-5 text-light-gray cursor-pointer transition hover:scale-[102%] hover:text-secondary-blue duration-300 ease-in-out",
+      }}
+    >
+      <div onClick={onClick}>
         <GrAttachment />
       </div>
     </IconContext.Provider>
@@ -95,6 +102,30 @@ export const CloseIcon = () => {
     <IconContext.Provider value={{ className: "size-5" }}>
       <div>
         <IoClose />
+      </div>
+    </IconContext.Provider>
+  );
+};
+
+export const FileIcon = ({ className }: { className?: string }) => {
+  return (
+    <IconContext.Provider
+      value={{ className: `${className} size-5 text-secondary-blue` }}
+    >
+      <div>
+        <LuFile />
+      </div>
+    </IconContext.Provider>
+  );
+};
+
+export const DownloadIcon = ({ className }: { className?: string }) => {
+  return (
+    <IconContext.Provider
+      value={{ className: `${className} size-8 text-white` }}
+    >
+      <div>
+        <LuDownload />
       </div>
     </IconContext.Provider>
   );

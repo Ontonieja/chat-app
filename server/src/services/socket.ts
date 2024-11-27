@@ -29,7 +29,6 @@ export const initSocket = (httpServer: HttpServer) => {
 
     if (userId) {
       userSocketMap.set(userId, socket.id);
-      console.log(userSocketMap);
 
       console.log(`User connected: ${userId}, socketId: ${socket.id}`);
     } else {
@@ -60,6 +59,8 @@ export const initSocket = (httpServer: HttpServer) => {
           isRead: data.isRead,
         });
       }
+      if (data.type === "FILE") return;
+
       await db.message.create({
         data: {
           recipentId: data.recipentId,
