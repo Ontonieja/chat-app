@@ -59,3 +59,30 @@ export const uploadFile = async (
     res.status(500).json({ message: "Internal server error", err });
   }
 };
+
+export const setMessagesRead = async (
+  req: RequestWithUser,
+  res: Response,
+): Promise<any> => {
+  const { userId } = req;
+  const { senderId } = req.body;
+
+  if (!userId || !senderId)
+    return res.status(404).json({ message: "User not found" });
+
+  try {
+    const result = await db.message.updateMany({
+      where: {
+        AND: [{ senderId: senderId }, { recipentId: userId }],
+      },
+      data: {
+        isRead: true,
+      },
+    });
+    return res
+      .status(200)
+      .json({ message: `${result.count} messages updated` });
+  } catch (err) {
+    return res.status(500).json({ message: "Internal server error", err });
+  }
+};

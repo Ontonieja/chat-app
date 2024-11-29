@@ -1,7 +1,7 @@
 import db from "../../prisma/db";
 import { RequestWithUser } from "../../middlewares/isAuth";
 import { Response } from "express";
-import { getMessages, uploadFile } from "../controllers/chat";
+import { getMessages, setMessagesRead, uploadFile } from "../controllers/chat";
 import { mockResponse } from "./mock";
 import { uploadToS3 } from "../services/s3";
 jest.mock("bcrypt");
@@ -10,6 +10,7 @@ jest.mock("../../prisma/db", () => ({
   message: {
     findMany: jest.fn(),
     create: jest.fn(),
+    updateMany: jest.fn(),
   },
 }));
 
@@ -149,6 +150,58 @@ describe("Chat Controller", () => {
           isRead: false,
         }),
       );
+    });
+  });
+
+  describe("setMessagesRead", () => {
+    it("Should return when userId or senderId is not provided", async () => {
+      req.userId = undefined;
+
+      await setMessagesRead(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ message: "User not found" });
+    });
+
+    it("Should update isRead to true", async () => {
+      req.body = { senderId: 2 };
+
+      (db.message.updateMany as jest.Mock).mockResolvedValue({ count: 3 });
+      await setMessagesRead(req, res);
+
+      expect(db.message.updateMany).toHaveBeenCalledWith({
+        where: {
+          AND: [{ senderId: 2 }, { recipentId: 1 }],
+        },
+        data: {
+          isRead: true,
+        },
+      });
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({ message: "3 messages updated" });
+    });
+
+    it("Should return 500 if there is database error", async () => {
+      req.body = { senderId: 2 };
+
+      (db.message.updateMany as jest.Mock).mockRejectedValue(
+        new Error("Database error"),
+      );
+      await setMessagesRead(req, res);
+
+      expect(db.message.updateMany).toHaveBeenCalledWith({
+        where: {
+          AND: [{ senderId: 2 }, { recipentId: 1 }],
+        },
+        data: {
+          isRead: true,
+        },
+      });
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Internal server error",
+        err: expect.any(Error),
+      });
     });
   });
 });
