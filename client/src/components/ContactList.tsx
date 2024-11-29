@@ -1,7 +1,7 @@
 import ContactElement from "./ContactElement";
 import SearchInput from "./ui/SearchInput";
 import { useState } from "react";
-import { useFetchAndSortContacts } from "../hooks/useFetchAndSortContacts";
+import { useSortContacts } from "../hooks/useSortContacts";
 import MobileDashboard from "./MobileDashboard";
 
 interface ContactListProps {
@@ -10,8 +10,7 @@ interface ContactListProps {
 
 export default function ContactList({ onContactClick }: ContactListProps) {
   const [searchTerm, setSearchTerm] = useState("");
-
-  const { sortedContacts } = useFetchAndSortContacts();
+  const { sortedContacts } = useSortContacts();
 
   const filteredContacts = sortedContacts.filter(
     (contact) =>
