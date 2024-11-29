@@ -1,19 +1,27 @@
 import { IconType } from "react-icons";
 import { useChatContext } from "../../hooks/useChatContext";
+import useAuth from "../../hooks/useAuth";
 
 interface DashboardElementProps {
   title: string;
   Icon: IconType;
-  count?: boolean;
   onClick?: () => void;
 }
 export default function DashboardElement({
   title,
   Icon,
-  count = true,
   onClick,
 }: DashboardElementProps) {
-  const { selectedUserData } = useChatContext();
+  const { selectedUserData, contactMessages } = useChatContext();
+  const { user } = useAuth();
+
+  const allMessages = Object.values(contactMessages).flatMap(
+    (message) => message
+  );
+
+  const unreadMessages = allMessages.filter(
+    (message) => !message.isRead && message.senderId !== user?.id
+  ).length;
   return (
     <div
       onClick={onClick}
@@ -25,15 +33,15 @@ export default function DashboardElement({
         <Icon />
         <span className="font-medium">{title}</span>
       </div>
-      {count && (
-        <div
-          className={`mr-2 bg-[#f2f7fa] rounded-xl flex items-center group-hover:bg-primary-blue group-hover:text-white duration-200 ease-linear ${
-            selectedUserData && "bg-primary-blue text-white"
-          }`}
-        >
-          <div className="px-2 py-0.5 text-[0.82rem] ">43</div>
+      <div
+        className={`mr-2 bg-[#f2f7fa] rounded-xl flex items-center group-hover:bg-primary-blue group-hover:text-white duration-200 ease-linear ${
+          selectedUserData && "bg-primary-red text-white"
+        }`}
+      >
+        <div className="px-2 py-1 rounded-xl  bg-primary-blue text-white text-xs">
+          {unreadMessages}
         </div>
-      )}
+      </div>
     </div>
   );
 }
