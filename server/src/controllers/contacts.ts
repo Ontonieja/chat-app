@@ -60,9 +60,15 @@ export const addContact = async (
     const contact = await db.contact.create({
       data: { userId, contactId },
     });
-    return res
-      .status(200)
-      .json({ message: "Contact added successfully", contact: contact });
+
+    const contact2 = await db.contact.create({
+      data: { userId: contactId, contactId: userId },
+    });
+    return res.status(200).json({
+      message: "Contact added successfully",
+      contact: contact,
+      contact2: contact2,
+    });
   } catch (err) {
     return res.status(404).json({ message: "Somethinig went wrong", err });
   }
@@ -76,9 +82,7 @@ export const getContacts = async (
   if (!userId) return res.status(404).json({ message: "User not found" });
 
   const contacts = await db.contact.findMany({
-    where: {
-      OR: [{ userId }, { contactId: userId }],
-    },
+    where: { userId },
     select: {
       user: {
         select: {
