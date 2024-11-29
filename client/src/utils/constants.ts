@@ -15,6 +15,7 @@ export const GET_CONTACTS = `${CONTACT_ROUTES}/get-contacts`;
 
 export const GET_MESSAGES = `${CHAT_ROUTES}/get-messages`;
 export const UPLOAD_FILE = `${CHAT_ROUTES}/upload-file`;
+export const SET_MESSAGES_READ = `${CHAT_ROUTES}/set-read`;
 
 export const TOAST_DURATION = 3000;
 

@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { ContactProps, MessageProps, UserProps } from "../utils/types";
 import { useAxios } from "../hooks/useAxios";
-import { GET_MESSAGES } from "../utils/constants";
+import { GET_CONTACTS, GET_MESSAGES } from "../utils/constants";
 import useAuth from "../hooks/useAuth";
 
 export interface ChatContextValue {
@@ -14,9 +14,9 @@ export interface ChatContextValue {
   userContacts: ContactProps[] | null;
   setUserContacts: React.Dispatch<React.SetStateAction<ContactProps[] | null>>;
   clearChatContext: () => void;
-  selectedUserMessages: MessageProps[] | null;
-  setSelectedUserMessages: React.Dispatch<
-    React.SetStateAction<MessageProps[] | null>
+  contactMessages: Record<number, MessageProps[]>;
+  setContactMessages: React.Dispatch<
+    React.SetStateAction<Record<number, MessageProps[]>>
   >;
 }
 
@@ -28,8 +28,8 @@ export const ChatContext = createContext<ChatContextValue>({
   userContacts: null as ContactProps[] | null,
   setUserContacts: () => {},
   clearChatContext: () => {},
-  selectedUserMessages: null,
-  setSelectedUserMessages: () => {},
+  contactMessages: {},
+  setContactMessages: () => {},
 });
 
 export function ChatContextProvider({
@@ -42,11 +42,11 @@ export function ChatContextProvider({
     UserProps | ContactProps | null
   >(null);
   const [userContacts, setUserContacts] = useState<ContactProps[] | null>(null);
-  const [selectedUserMessages, setSelectedUserMessages] = useState<
-    MessageProps[] | null
-  >(null);
+  const [contactMessages, setContactMessages] = useState<
+    Record<number, MessageProps[]>
+  >({});
 
-  const { fetchData, response, isLoading } = useAxios();
+  const { fetchData } = useAxios();
   const { user } = useAuth();
 
   const clearChatContext = () => {
@@ -56,31 +56,48 @@ export function ChatContextProvider({
 
   useEffect(() => {
     if (user) {
-      const fetchMessages = async () => {
+      const fetchMessagesAndContacts = async () => {
         try {
-          await fetchData({
+          const messagesResponse = await fetchData({
             url: GET_MESSAGES,
             method: "GET",
           });
+
+          const contactsResponse = await fetchData({
+            url: GET_CONTACTS,
+            method: "GET",
+          });
+
+          const groupedMessages = messagesResponse.reduce(
+            (
+              acc: { [contactId: number]: MessageProps[] },
+              message: MessageProps
+            ) => {
+              const contactId =
+                message.senderId === user.id
+                  ? message.recipentId
+                  : message.senderId;
+
+              if (!acc[contactId]) {
+                acc[contactId] = [];
+              }
+              acc[contactId].push(message);
+              return acc;
+            },
+            {} as { [contactId: string]: MessageProps[] }
+          );
+
+          if (contactsResponse)
+            setUserContacts(contactsResponse as ContactProps[]);
+          setContactMessages(groupedMessages);
         } catch (error) {
-          console.error("Błąd podczas ładowania wiadomości:", error);
+          console.error("Error fetching messages", error);
         }
       };
 
-      fetchMessages();
+      fetchMessagesAndContacts();
     }
   }, [user]);
-
-  useEffect(() => {
-    if (!isLoading && response) {
-      if (Array.isArray(response) && response.length > 0) {
-        setSelectedUserMessages(response as MessageProps[]);
-      } else {
-        console.warn("Response is empty or invalid:", response);
-        setSelectedUserMessages([]);
-      }
-    }
-  }, [response, isLoading]);
 
   return (
     <ChatContext.Provider
@@ -92,8 +109,8 @@ export function ChatContextProvider({
         userContacts,
         setUserContacts,
         clearChatContext,
-        selectedUserMessages,
-        setSelectedUserMessages,
+        contactMessages,
+        setContactMessages,
       }}
     >
       {children}

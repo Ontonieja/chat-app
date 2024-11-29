@@ -9,21 +9,18 @@ interface TimeAgoParams {
 }
 
 export default function ContactElement({ contact }: { contact: ContactProps }) {
-  const { selectedUserData, setSelectedUserData, selectedUserMessages } =
+  const { selectedUserData, setSelectedUserData, contactMessages } =
     useChatContext();
   const { user } = useAuth();
   const userId = selectedUserData?.id;
   const { firstName, lastName, avatar, id: contactId } = contact;
 
-  const contactMessages = selectedUserMessages?.filter((message) => {
-    const { recipentId, senderId } = message;
-    return (
-      (recipentId === contactId && senderId === user?.id) ||
-      (senderId === contactId && recipentId === user?.id)
-    );
-  });
+  const lastMessage = contactMessages[contact.id]?.[0];
 
-  const lastMessage = contactMessages?.[contactMessages.length - 1];
+  const unreadMessages =
+    contactMessages[contactId]?.filter(
+      (message) => message.senderId === contactId && !message.isRead
+    ).length || 0;
 
   const lastMessageDisplay =
     lastMessage?.type === "FILE" ? "Sent file" : lastMessage?.message;
@@ -51,7 +48,7 @@ export default function ContactElement({ contact }: { contact: ContactProps }) {
       onClick={() => setSelectedUserData(contact)}
     >
       <img src={avatar} className="size-10 rounded-full "></img>
-      <div className="flex-1">
+      <div className="flex-1 relative">
         <div className="flex justify-between">
           <h3 className="sm:text-xs md:text-sm  font-medium">{`${firstName} ${lastName}`}</h3>
           <span className="text-light-gray text-xs">
@@ -60,6 +57,9 @@ export default function ContactElement({ contact }: { contact: ContactProps }) {
             ) : (
               formatTimeAgo({ daysAgo, hoursAgo, minutesAgo })
             )}
+          </span>
+          <span className="absolute bottom-0 right-0 py-[2px] px-[6px] text-xs rounded-full text-white bg-[#ef253b]">
+            {unreadMessages}
           </span>
         </div>
         <p className="sm:text-xs md:text-sm text-light-gray line-clamp-1">

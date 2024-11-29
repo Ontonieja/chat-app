@@ -13,8 +13,7 @@ const SocketContext = React.createContext<{
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const { user } = useAuth();
-  const { userContacts, setSelectedUserMessages, selectedUserData } =
-    useChatContext();
+  const { setContactMessages, selectedUserData } = useChatContext();
 
   useEffect(() => {
     if (user) {
@@ -45,24 +44,16 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   }, [user]);
 
   useEffect(() => {
-    const handleReceiveMessage = (data: MessageProps) => {
-      if (
-        (selectedUserData?.id &&
-          user?.id &&
-          selectedUserData?.id === data.senderId) ||
-        selectedUserData?.id === data.recipentId ||
-        user?.id === data.recipentId ||
-        user?.id === data.senderId
-      ) {
-        setSelectedUserMessages((prevMessages) => {
-          const updatedMessages = prevMessages
-            ? [...prevMessages, data]
-            : [data];
-          console.log("Updated Messages:", updatedMessages);
+    const handleReceiveMessage = (message: MessageProps) => {
+      setContactMessages((prevMessages) => {
+        const contactId =
+          message.senderId === user?.id ? message.recipentId : message.senderId;
 
-          return updatedMessages;
-        });
-      }
+        return {
+          ...prevMessages,
+          [contactId]: [...(prevMessages[contactId] || []), message],
+        };
+      });
     };
 
     socket.on("receiveMessage", handleReceiveMessage);
@@ -70,7 +61,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     return () => {
       socket.off("receiveMessage", handleReceiveMessage);
     };
-  }, [selectedUserData, setSelectedUserMessages, user]);
+  }, [selectedUserData, user]);
 
   return (
     <SocketContext.Provider value={{ isConnected }}>

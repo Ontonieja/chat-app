@@ -7,6 +7,8 @@ import Separator from "./ui/Separator";
 import useAuth from "../hooks/useAuth";
 
 import MessageSendForm from "./MessageSendForm";
+import { useAxios } from "../hooks/useAxios";
+import { SET_MESSAGES_READ } from "../utils/constants";
 
 interface ChatElementProps {
   isChatOpen: boolean;
@@ -16,9 +18,17 @@ export default function ChatElement({
   isChatOpen,
   closeChat,
 }: ChatElementProps) {
-  const { selectedUserData, selectedUserMessages } = useChatContext();
+  const { selectedUserData, contactMessages, setContactMessages } =
+    useChatContext();
   const messagesEndRef = useRef(null);
   const { user } = useAuth();
+  const { fetchData } = useAxios();
+
+  const isMessageToRead =
+    selectedUserData &&
+    contactMessages[selectedUserData.id]?.filter(
+      (message) => !message.isRead && message.recipentId === user?.id
+    );
 
   // Scroll to bottom when new message arrives
   useEffect(() => {
@@ -27,14 +37,31 @@ export default function ChatElement({
         behavior: "smooth",
       });
     }
-  }, [selectedUserMessages]);
+  }, [contactMessages]);
 
-  // Filter messages to show only those between the curent user and selected user
-  const contactMessages = selectedUserMessages?.filter(
-    (message) =>
-      message.senderId === selectedUserData?.id ||
-      message.recipentId === selectedUserData?.id
-  );
+  useEffect(() => {
+    if (!isMessageToRead || !isMessageToRead.length) return;
+    fetchData({
+      url: SET_MESSAGES_READ,
+      method: "PUT",
+      data: { senderId: selectedUserData?.id },
+    });
+
+    setContactMessages((prevContactMessages) => ({
+      ...prevContactMessages,
+      [selectedUserData?.id as number]: prevContactMessages[
+        selectedUserData?.id as number
+      ].map((message) =>
+        !message.isRead ? { ...message, isRead: true } : message
+      ),
+    }));
+  }, [selectedUserData]);
+
+  const messages = selectedUserData
+    ? [...(contactMessages[selectedUserData.id] || [])].sort(
+        (a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime()
+      )
+    : [];
 
   return (
     <section
@@ -52,7 +79,7 @@ export default function ChatElement({
 
       <Separator />
       <div className="flex-1 overflow-y-auto mt-8 space-y-8">
-        {contactMessages?.map((message, index) => (
+        {messages?.map((message, index) => (
           <Message
             otherUser={message.senderId !== user?.id}
             key={index}

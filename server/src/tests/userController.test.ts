@@ -117,6 +117,7 @@ describe("Contacts controller", () => {
       expect(res.json).toHaveBeenCalledWith({
         message: "Contact added successfully",
         contact: { id: 1, userId: req.userId, contactId: req.body.contactId },
+        contact2: { id: 1, userId: req.userId, contactId: req.body.contactId },
       });
     });
 
