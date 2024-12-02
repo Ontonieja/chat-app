@@ -3,7 +3,8 @@
 This app is a chat platform for real-time messaging and media sharing.
 
 <h2>Design 🎨</h2> 
-![image](https://github.com/user-attachments/assets/46b5ec32-b609-4e64-b851-1048bf754cb8)
+
+![github-design](https://github.com/user-attachments/assets/3087b389-07f2-4f9a-a8f0-518e462fcde8)
 
 <h2>Technologies Used</h2>
 <b>Frontend:</b> React, Vite, TailwindCSS<br>
