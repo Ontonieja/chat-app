@@ -2,7 +2,7 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 import db from "../../prisma/db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { RequestWithUser } from "../../middlewares/isAuth";
+import { RequestWithUser } from "../middlewares/isAuth";
 
 const maxAge = 3 * 24 * 60 * 60 * 1000;
 export const signUp = async (req: Request, res: Response): Promise<any> => {

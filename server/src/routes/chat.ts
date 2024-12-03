@@ -1,5 +1,5 @@
 import { Router } from "express";
-import isAuth from "../../middlewares/isAuth";
+import isAuth from "../middlewares/isAuth";
 import { getMessages, setMessagesRead, uploadFile } from "../controllers/chat";
 
 import multer, { memoryStorage } from "multer";

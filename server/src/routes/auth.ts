@@ -5,7 +5,7 @@ import {
   updateUserProfile,
   userLogin,
 } from "../controllers/auth";
-import isAuth from "../../middlewares/isAuth";
+import isAuth from "../middlewares/isAuth";
 
 const router = Router();
 

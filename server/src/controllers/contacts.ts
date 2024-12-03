@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import db from "../../prisma/db";
-import { RequestWithUser } from "../../middlewares/isAuth";
+import { RequestWithUser } from "../middlewares/isAuth";
 
 export const findContacts = async (
   req: RequestWithUser,
