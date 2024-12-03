@@ -1,5 +1,3 @@
-export const HOST = import.meta.env.VITE_SERVER_URL;
-
 export const AUTH_ROUTES = "/auth";
 export const CONTACT_ROUTES = "/contacts";
 export const CHAT_ROUTES = "/chat";
