@@ -17,17 +17,15 @@ export default function LeftLoginPanel() {
   const panelText = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    // Ruch dla shapeTop z różnym czasem i przesunięciem
     gsap.to(".shapeTop", {
-      y: (i) => (i % 2 === 0 ? 30 : 50), // Różne wartości Y na podstawie indeksu
-      duration: (i) => 2 + i * 0.3, // Różna długość animacji
-      delay: (i) => i * 0.2, // Opóźnienie na podstawie indeksu
+      y: (i) => (i % 2 === 0 ? 30 : 50),
+      duration: (i) => 2 + i * 0.3,
+      delay: (i) => i * 0.2,
       ease: "power1.inOut",
       repeat: -1,
       yoyo: true,
     });
 
-    // Ruch dla shapeBottom z większym zakresem i wolniejszym tempem
     gsap.to(".shapeBottom", {
       y: (i) => (i % 2 === 0 ? -40 : -20),
       duration: (i) => 3 + i * 0.5,

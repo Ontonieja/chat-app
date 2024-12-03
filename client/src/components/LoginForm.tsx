@@ -65,9 +65,10 @@ export default function LoginForm({ showSignUp }: { showSignUp: boolean }) {
     >
       <div className="relative group">
         <FormInput type="email" name="email" placeholder="Email" />
-        {error && <p className="pl-1 mt-1 text-red-500">{error}</p>}
         <MdAlternateEmail className="absolute size-6 right-4 group-hover:text-primary-blue  group-focus-within:text-primary-blue top-1/2 -translate-y-1/2" />
       </div>
+      {error && <p className=" text-red-500 -mt-2">{error}</p>}
+
       <div className="relative group">
         <FormInput
           type={showPassword ? "text" : "password"}
