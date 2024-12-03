@@ -1,8 +1,9 @@
 import { useState } from "react";
 
 import axios from "axios";
+const NODE_SERVER_URL = import.meta.env.VITE_NODE_SERVER_URL;
 
-axios.defaults.baseURL = "http://localhost:4000/";
+axios.defaults.baseURL = NODE_SERVER_URL;
 
 export interface AxiosParamsProps {
   method: "GET" | "POST" | "PUT" | "DELETE";

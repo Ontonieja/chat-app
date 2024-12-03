@@ -1,5 +1,5 @@
 import db from "../../prisma/db";
-import { RequestWithUser } from "../../middlewares/isAuth";
+import { RequestWithUser } from "../middlewares/isAuth";
 import { Response } from "express";
 import { getMessages, setMessagesRead, uploadFile } from "../controllers/chat";
 import { mockResponse } from "./mock";

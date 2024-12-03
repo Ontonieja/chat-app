@@ -1,5 +1,5 @@
 import { addContact, findContacts, getContacts } from "../controllers/contacts";
-import { RequestWithUser } from "../../middlewares/isAuth";
+import { RequestWithUser } from "../middlewares/isAuth";
 import db from "../../prisma/db";
 import { mockResponse } from "./mock";
 import { Request, Response } from "express";

@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { RequestWithUser } from "../../middlewares/isAuth";
+import { RequestWithUser } from "../middlewares/isAuth";
 import db from "../../prisma/db";
 import { uploadToS3 } from "../services/s3";
 
@@ -34,7 +34,7 @@ export const uploadFile = async (
   const { userId, file } = req;
   const { recipentId } = req.body;
 
-  console.log(file);
+  console.log("hehe");
 
   if (!file || !userId)
     return res.status(404).json({ message: "File or user not provided" });
