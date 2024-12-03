@@ -11,12 +11,12 @@ import { initSocket } from "./services/socket";
 const app: Express = express();
 const httpServer = http.createServer(app);
 
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  }),
-);
+const corsOptions = {
+  origin: "http://localhost:4000",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 initSocket(httpServer);
 app.use(cookieParser());

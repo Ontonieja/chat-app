@@ -1,0 +1,66 @@
+version: "3.8"
+services:
+  # Node.js backend
+  server:
+    build:
+      context: ./server
+    container_name: node_server
+    ports:
+      - "3000:3000"
+      - "5555:5555"
+    env_file:
+      - server/.env
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["yarn", "start-dev"]
+    working_dir: "/server"
+    volumes:
+      - ./server:/server
+      - /server/node_modules
+    networks:
+      - app-network
+
+  # React frontend
+  client:
+    build:
+      context: ./client
+    container_name: react_client
+    ports:
+      - "4000:4000"
+    env_file:
+      - client/.env
+    depends_on:
+      - server
+    working_dir: "/client"
+    volumes:
+      - ./client:/client
+      - /client/node_modules
+    networks:
+      - app-network
+    command: ["yarn", "dev"]
+
+  # PostgreSQL
+  db:
+    image: postgres:13-alpine
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: chat_app
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d chat_app"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

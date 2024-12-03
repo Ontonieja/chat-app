@@ -1,6 +1,9 @@
 {
   "name": "server",
   "version": "1.0.0",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
@@ -27,25 +30,31 @@
     "typescript": "^5.6.3"
   },
   "scripts": {
-    "start": "nodemon src/server.ts",
+    "dev": "nodemon --legacy-watch src/server.ts",
+    "start": "node dist/server.js",
+    "start-dev": "npx prisma migrate deploy && npx prisma db seed && yarn dev",
     "prepare": "cd .. && husky server/.husky",
+    "build": "tsc",
     "test": "jest",
     "test-watch": "jest --watch"
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "*.ts": "prettier --write",
+    "*.tsx": "prettier --write",
+    "*.js": "prettier --write",
+    "*.json": "prettier --write",
+    "*.md": "prettier --write",
+    "!**/*.dockerignore": "prettier --write --ignore-unknown",
+    "!Dockerfile": "prettier --write --ignore-unknown"
   },
-  "dependencies": {
-    "@aws-sdk/client-s3": "^3.699.0",
-    "@aws-sdk/s3-request-presigner": "^3.700.0",
-    "bcrypt": "^5.1.1",
-    "cookie-parser": "^1.4.7",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "jsonwebtoken": "^9.0.2",
-    "multer": "^1.4.5-lts.1",
-    "socket.io": "^4.8.0",
-    "socket.io-client": "^4.8.1",
-    "uuid": "^11.0.3"
-  }
+  "@aws-sdk/s3-request-presigner": "^3.700.0",
+  "bcrypt": "^5.1.1",
+  "cookie-parser": "^1.4.7",
+  "cors": "^2.8.5",
+  "dotenv": "^16.4.5",
+  "jsonwebtoken": "^9.0.2",
+  "multer": "^1.4.5-lts.1",
+  "socket.io": "^4.8.0",
+  "socket.io-client": "^4.8.1",
+  "uuid": "^11.0.3"
 }

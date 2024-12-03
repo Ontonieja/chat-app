@@ -5,7 +5,7 @@ import db from "../../prisma/db";
 export const initSocket = (httpServer: HttpServer) => {
   const io = new SocketIOServer(httpServer, {
     cors: {
-      origin: "http://localhost:5173",
+      origin: "http://localhost:4000",
       methods: ["GET", "POST"],
       allowedHeaders: ["Content-Type"],
       credentials: true,
@@ -29,7 +29,6 @@ export const initSocket = (httpServer: HttpServer) => {
 
     if (userId) {
       userSocketMap.set(userId, socket.id);
-
       console.log(`User connected: ${userId}, socketId: ${socket.id}`);
     } else {
       console.log("User ID not provided");
