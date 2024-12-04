@@ -12,7 +12,7 @@ const app: Express = express();
 const httpServer = http.createServer(app);
 
 const corsOptions = {
-  origin: "http://localhost:4000",
+  origin: process.env.CLIENT_URL,
   credentials: true,
 };
 
