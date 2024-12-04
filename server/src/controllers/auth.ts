@@ -34,7 +34,7 @@ export const signUp = async (req: Request, res: Response): Promise<any> => {
 
     res.cookie("jwt", token, {
       maxAge,
-      secure: process.env.NODE_ENV === "production" ? false : false,
+      secure: process.env.NODE_ENV === "production" ? true : false,
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     });
     return res.status(200).json({
@@ -75,7 +75,7 @@ export const userLogin = async (req: Request, res: Response): Promise<any> => {
   }
   res.cookie("jwt", token, {
     maxAge,
-    secure: process.env.NODE_ENV === "production" ? false : false,
+    secure: process.env.NODE_ENV === "production" ? true : false,
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   });
   return res.status(200).json({
