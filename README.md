@@ -2,6 +2,9 @@
 
 This app is a chat platform for real-time messaging and media sharing. I developed it to deepen my understanding of how socket.io works and strengthen my skills in building full-stack REST APIs. 
 
+<b>Live Demo: </b> https://chat-app-frontend-gcfo.onrender.com
+<br><br>See point 7 for the list of example users (seeded users)
+
 <h2>🚀 Design </h2> 
 
 ![github-design](https://github.com/user-attachments/assets/3087b389-07f2-4f9a-a8f0-518e462fcde8)
@@ -68,6 +71,13 @@ npx prisma db seed
  ```bash
 cd ../client && yarn dev
 ```
+
+<h4>7. Project is seeded with 3 example users</h4>
+<ul>
+<li> Email: test1@example.com, password: password</li>
+<li> Email: test2@example.com, password: password</li>
+<li> Email: test3@example.com, password: password</li>
+</ul>
 
 <h3>Docker Setup</h3>
 
