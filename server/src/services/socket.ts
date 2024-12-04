@@ -5,7 +5,7 @@ import db from "../../prisma/db";
 export const initSocket = (httpServer: HttpServer) => {
   const io = new SocketIOServer(httpServer, {
     cors: {
-      origin: "http://localhost:4000",
+      origin: process.env.CLIENT_URL,
       methods: ["GET", "POST"],
       allowedHeaders: ["Content-Type"],
       credentials: true,
