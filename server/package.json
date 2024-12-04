@@ -44,7 +44,7 @@
   },
   "scripts": {
     "dev": "nodemon --legacy-watch src/server.ts",
-    "start": "node dist/server.js",
+    "start": "node dist/src/server.js",
     "start-dev": "npx prisma migrate deploy && npx prisma db seed && yarn dev",
     "prepare": "cd .. && husky server/.husky",
     "build": "tsc",
